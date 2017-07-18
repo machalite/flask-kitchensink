@@ -71,11 +71,6 @@ def make_static_tmp_dir():
             raise
 
 
-@app.route('/')
-def hello_world():
-    return 'Successfully deployed !!'
-
-
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
