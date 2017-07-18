@@ -68,7 +68,7 @@ def make_static_tmp_dir():
             raise
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def hello_world():
     return 'halo aku hidup'
 
