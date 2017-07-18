@@ -16,7 +16,7 @@ from __future__ import unicode_literals
 
 import errno
 import os
-import sys
+# import sys
 import tempfile
 from argparse import ArgumentParser
 
@@ -51,7 +51,10 @@ app = Flask(__name__)
 #     print('Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.')
 #     sys.exit(1)
 
-line_bot_api = LineBotApi('DUTE1UOjEqCQpJynGDa59KSV42WXmVjM8/Dw2qaFuyA9ePaA40Qy2lHRcfRaM0SzM3HpvNYySB2IrkJGiQ+1RktH1Ko6285vipalBZ8WtDy+6T1pRZDnS/NHDvUgadaxLCR0TbACjTKRyZkMpOjYUgdB04t89/1O/w1cDnyilFU=')
+line_bot_api = LineBotApi('DUTE1UOjEqCQpJynGDa59KSV42WXmVjM8/Dw2qaFuyA9ePaA4' +
+                          '0Qy2lHRcfRaM0SzM3HpvNYySB2IrkJGiQ+1RktH1Ko6285vip' +
+                          'alBZ8WtDy+6T1pRZDnS/NHDvUgadaxLCR0TbACjTKRyZkMpOj' +
+                          'YUgdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('a62c4f246f3dfe799fa69c44d9d99a82')
 
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
@@ -68,9 +71,9 @@ def make_static_tmp_dir():
             raise
 
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def hello_world():
-    return 'halo aku hidup'
+    return 'Successfully deployed !!'
 
 
 @app.route("/callback", methods=['POST'])
@@ -205,7 +208,8 @@ def handle_content_message(event):
         return
 
     message_content = line_bot_api.get_message_content(event.message.id)
-    with tempfile.NamedTemporaryFile(dir=static_tmp_path, prefix=ext + '-', delete=False) as tf:
+    with tempfile.NamedTemporaryFile(dir=static_tmp_path, prefix=ext + '-',
+                                     delete=False) as tf:
         for chunk in message_content.iter_content():
             tf.write(chunk)
         tempfile_path = tf.name
@@ -217,7 +221,9 @@ def handle_content_message(event):
     line_bot_api.reply_message(
         event.reply_token, [
             TextSendMessage(text='Save content.'),
-            TextSendMessage(text=request.host_url + os.path.join('static', 'tmp', dist_name))
+            TextSendMessage(text=request.host_url + os.path.join('static',
+                                                                 'tmp',
+                                                                 dist_name))
         ])
 
 
@@ -256,8 +262,8 @@ def handle_beacon(event):
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(
-            text='Got beacon event. hwid={}, device_message(hex string)={}'.format(
-                event.beacon.hwid, event.beacon.dm)))
+            text='Got beacon event. hwid={}, device_message(hex string)={}'
+            .format(event.beacon.hwid, event.beacon.dm)))
 
 
 if __name__ == "__main__":
